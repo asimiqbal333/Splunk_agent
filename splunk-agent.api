@@ -22,3 +22,13 @@ export default function handler(req, res) {
     suggested_action: 'Block and report to eSafety.gov.au'
   });
 }
+export default function handler(req, res) {
+  try {
+    res.setHeader('Access-Control-Allow-Origin', '*');
+    const body = typeof req.body === 'string' ? JSON.parse(req.body) : req.body;
+    // your existing logic here
+    res.status(200).json({alert_id: body.alert_id, risk_level: "High"});
+  } catch (e) {
+    res.status(500).json({error: e.message});
+  }
+}
