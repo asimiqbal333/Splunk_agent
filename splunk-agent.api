@@ -1,0 +1,24 @@
+export default function handler(req, res) {
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+  
+  if (req.method === 'OPTIONS') return res.status(200).end();
+  if (req.method !== 'POST') return res.status(405).json({error: 'POST only'});
+  
+  const {alert_id, alert_text, source, user_age} = req.body;
+  
+  let risk = 'Low';
+  let reason = 'Safe content';
+  if (alert_text && alert_text.toLowerCase().includes('prize')) {
+    risk = 'High';
+    reason = 'GenZ scam targeting minor - AU eSafety threat';
+  }
+  
+  res.status(200).json({
+    alert_id,
+    risk_level: risk,
+    reason,
+    suggested_action: 'Block and report to eSafety.gov.au'
+  });
+}
